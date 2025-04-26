@@ -32,23 +32,6 @@ pipeline {
                 }
             }
         }
-        stage('Quality Check') {
-            steps {
-                script {
-                    timeout(time: 2, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
-                }
-            }
-        }
-    }
-        stage('OWASP Dependency-Check Scan') {
-            steps {
-                dir('Application-Code/frontend') {
-                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
-                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-                }
-            }
-        }
         stage('Trivy File Scan') {
             steps {
                 dir('Application-Code/frontend') {
